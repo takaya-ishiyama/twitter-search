@@ -11,3 +11,4 @@ django-cleanup==6.0.0
 mecab-python3==1.0.5
 tweepy==4.10.1
 wordcloud==1.8.2.2
+unidic-lite==1.0.8

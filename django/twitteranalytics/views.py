@@ -1,4 +1,5 @@
 from ast import keyword
+from glob import glob
 from urllib import request
 from django.shortcuts import render
 import MeCab
@@ -31,7 +32,7 @@ class IndexView(TemplateView):
 
     # ポストリクエスト
     def post(self, request, *args, **kwargs):
-        wordcloud,res, cnt=self.wordcloud(request)
+        wordcloud,res, cnt,exe=self.wordcloud(request)
         negativeper=res['n']/cnt
         pojitiveper=res['p']/cnt
         context={
@@ -39,6 +40,7 @@ class IndexView(TemplateView):
             'negative':res['n'],
             'positive':res['p'],
             'natural':res['e'],
+            'exeption':exe,
             'negativeper':negativeper,
             'pojitiveper':pojitiveper
         }
@@ -81,13 +83,12 @@ class IndexView(TemplateView):
 
     # wordcloud画像生成
     def wordcloud(self, request):
-        mb=MeCab.Tagger("-Owakati")
         res, cnt, np_word_dic, dic_result=self.negapoji(request)
-        # dic_result=self.morphological_analysis(request)
-        # np_word_dic=self.negapoji(request)[5]
-
+        global exe
+        exe=0
         # 文字ごとに色を返す関数
         def pos_color_func(word,**kwargs):
+            global exe
             cmap = cm.get_cmap("tab20")
             negapoji=np_word_dic[word]
             if negapoji=='n':
@@ -96,18 +97,22 @@ class IndexView(TemplateView):
                 color_index=6
             elif negapoji=='e':
                 color_index=14
+            else:
+                exe+=1
+                color_index=8
+    
             rgb = cmap(color_index)
             return mcolors.rgb2hex(rgb)
 
-
-        FONT_PATH = "../sys/fonts-japanese-gothic.ttf"
+        # FONT_PATH = "../sys/fonts-japanese-gothic.ttf"
+        FONT_PATH="/etc/sys/fonts/fonts-japanese-gothic.ttf"
         wordcloud = WordCloud(font_path=FONT_PATH,width=700, height=400,background_color='white', color_func = pos_color_func).fit_words(dic_result).to_image()
         buffer = BytesIO() 
         wordcloud.save(buffer, format="PNG") 
 
         base64Img = base64.b64encode(buffer.getvalue()).decode().replace("'", "")
 
-        return base64Img,res, cnt
+        return base64Img,res, cnt, exe
 
     # ネガポジ判定
     def negapoji(self, request):
@@ -134,13 +139,7 @@ class IndexView(TemplateView):
                 res['e']+=1
                 np_word_dic[analytics_word]='e'
 
-
-
-        # print(res)
         cnt = res["p"] + res["n"] + res["e"]
-        # print("ポジティブ度", res["p"] / cnt)
-        # print("ネガティブ度", res["n"] / cnt)
-        
 
         return res, cnt, np_word_dic, dic_result
 
