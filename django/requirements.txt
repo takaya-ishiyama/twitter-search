@@ -1,0 +1,13 @@
+asgiref==2.3.0
+daphne==2.2.1
+django>=2.1.10
+PyMySQL==0.9.2
+pytz==2018.5
+uwsgi==2.0.17.1
+psycopg2-binary==2.9.3
+psycopg2==2.9.3
+Pillow==9.0.1
+django-cleanup==6.0.0
+mecab-python3==1.0.5
+tweepy==4.10.1
+wordcloud==1.8.2.2

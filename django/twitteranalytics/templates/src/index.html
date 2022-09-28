@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}twitter analytics{% endblock %}
+{% block content %}
+<h1>TwitterネガポジWordCloud</h1>
+    
+<p>ツイッター検索の上位100件を抽出し単語に分解、名詞からネガポジ判定します</p>
+<p>日本語評価極性辞書を使用</p>
+<form action={% url 'twitteranalytics:index'%} method="POST" class="search">
+    {% csrf_token %}
+    <div class="input-group">
+        <input type="text" name="search" class="form-control" name="search" placeholder="キーワードを入力">
+        <button class="btn btn-outline-success" name="searchbtn" type="submit" id="button-addon2">検索</button>
+    </div>
+</form> 
+        
+        {%if wordcloud%}
+        <p>ネガティブ、ポジティブ比率</p>
+        <ul>
+            <li>ポジティブ：{{pojitiveper}}</li>
+            <li>ネガティブ：{{negativeper}}</li>
+        </ul>
+
+        <p>単語数</p>
+        <ul>
+            <li style="color:red">ポジティブ：{{positive}}</li>
+            <li style="color:blue">ネガティブ：{{negative}}</li>
+            <li style="color:#696969">ナチュラル：{{natural}}</li>
+        </ul>
+
+        <p><img src="data:image/png;base64,{{wordcloud}}" width="80%" hight="200px"></p>
+        {%endif%}
+{% endblock %}

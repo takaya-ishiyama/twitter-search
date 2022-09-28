@@ -1,0 +1,2 @@
+2022/09/25 16:56:16 [error] 16#16: *2 connect() failed (111: Connection refused) while connecting to upstream, client: 192.168.176.1, server: _, request: "GET / HTTP/1.1", upstream: "uwsgi://192.168.176.2:8001", host: "localhost:8000"
+2022/09/25 16:56:18 [error] 16#16: *2 connect() failed (111: Connection refused) while connecting to upstream, client: 192.168.176.1, server: _, request: "GET / HTTP/1.1", upstream: "uwsgi://192.168.176.2:8001", host: "localhost:8000"
