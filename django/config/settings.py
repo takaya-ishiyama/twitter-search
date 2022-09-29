@@ -101,6 +101,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+ALLOWED_HOSTS = ['127.0.0.1','153.121.57.137','localhost', 'twitter-negapoji.com']
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
